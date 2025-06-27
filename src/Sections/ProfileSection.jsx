@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { FaBrain, FaComments, FaChild, FaRing, FaBalanceScale } from "react-icons/fa";
+import { FaBrain, FaComments, FaChild, FaRing, FaBalanceScale, FaGlobe, FaLaptopHouse } from "react-icons/fa";
 import IMG1 from "./Assets/IMG1.jpg";
 
 const ProfileSection = () => {
@@ -63,6 +63,12 @@ const ProfileSection = () => {
             </p>
             <p className="flex items-center gap-2">
               <FaRing className="text-pink-500" /> Premarital & Couple Therapy
+            </p>
+             <p className="flex items-center gap-2">
+              <FaLaptopHouse className="text-pink-500" /> Sessions Available: Online & Offline
+            </p>
+            <p className="flex items-center gap-2">
+              <FaGlobe className="text-pink-500" /> Languages: Malayalam, English, Hindi, Dhivehi
             </p>
           </div>
         </div>
