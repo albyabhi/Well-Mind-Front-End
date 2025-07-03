@@ -1,7 +1,46 @@
-import React from 'react';
+import React, { useState } from "react";
 
 const Appointment = () => {
   const today = new Date().toISOString().split("T")[0];
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  const [submitted, setSubmitted] = useState(false); // ✅ new state
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+    const data = {
+      name: form.name.value,
+      contact: form.contact.value,
+      help: form.help.value,
+      date: form.date.value,
+    };
+
+    try {
+      const res = await fetch(`${API_URL}/api/appointments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+      console.log("Server response:", result);
+
+      if (res.ok) {
+        form.reset();
+        setSubmitted(true); // ✅ show success
+        setTimeout(() => setSubmitted(false), 3000); // ✅ revert after 3 sec
+      } else {
+        alert("⚠️ " + result.message || "Something went wrong.");
+      }
+    } catch (error) {
+      console.error("Network Error:", error);
+      alert("❌ Failed to connect to server. Please try again later.");
+    }
+  };
 
   return (
     <div className="flex justify-center items-center px-4 bg-[#fdf5f9] min-h-screen">
@@ -10,7 +49,7 @@ const Appointment = () => {
           Book an Appointment
         </h2>
 
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit}>
           {/* Name */}
           <div>
             <label className="block text-[#2c2c5e] font-medium mb-2">Name</label>
@@ -25,7 +64,9 @@ const Appointment = () => {
 
           {/* Contact Number */}
           <div>
-            <label className="block text-[#2c2c5e] font-medium mb-2">Contact Number</label>
+            <label className="block text-[#2c2c5e] font-medium mb-2">
+              Contact Number
+            </label>
             <input
               type="tel"
               name="contact"
@@ -37,7 +78,9 @@ const Appointment = () => {
 
           {/* Help Needed */}
           <div>
-            <label className="block text-[#2c2c5e] font-medium mb-2">What help do you need?</label>
+            <label className="block text-[#2c2c5e] font-medium mb-2">
+              What help do you need?
+            </label>
             <textarea
               name="help"
               rows="4"
@@ -49,7 +92,9 @@ const Appointment = () => {
 
           {/* Appointment Date */}
           <div>
-            <label className="block text-[#2c2c5e] font-medium mb-2">Preferred Appointment Date</label>
+            <label className="block text-[#2c2c5e] font-medium mb-2">
+              Preferred Appointment Date
+            </label>
             <input
               type="date"
               name="date"
@@ -63,9 +108,13 @@ const Appointment = () => {
           <div>
             <button
               type="submit"
-              className="w-full bg-pink-500 text-white py-3 rounded-lg font-semibold hover:bg-pink-600 transition-all duration-200"
+              className={`w-full py-3 cursor-pointer rounded-lg font-semibold transition-all duration-300 ${
+                submitted
+                  ? "bg-green-500 hover:bg-green-600 text-white"
+                  : "bg-pink-500 hover:bg-pink-600 text-white"
+              }`}
             >
-              Book Appointment
+              {submitted ? "Appointment Booked Successfully" : "Book Appointment"}
             </button>
           </div>
         </form>
