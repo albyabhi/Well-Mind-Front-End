@@ -59,12 +59,15 @@ const Dashboard = () => {
   };
 
   // Filter by selected date
-  const filteredAppointments = selectedDate
-    ? appointments.filter((apt) => {
-        const aptDate = new Date(apt.date).toISOString().split("T")[0];
-        return aptDate === selectedDate;
-      })
-    : appointments;
+  // Filter by selected date and sort newest to oldest
+  const filteredAppointments = (
+    selectedDate
+      ? appointments.filter((apt) => {
+          const aptDate = new Date(apt.date).toISOString().split("T")[0];
+          return aptDate === selectedDate;
+        })
+      : appointments
+  ).sort((a, b) => new Date(b.date) - new Date(a.date)); // <-- Sort descending
 
   return (
     <div className="flex justify-center items-center px-4 bg-[#fdf5f9] min-h-screen">
@@ -129,7 +132,7 @@ const Dashboard = () => {
                   <button
                     onClick={() => toggleStatus(apt._id, apt.status)}
                     disabled={loadingStatusId === apt._id}
-                    className={`w-full py-2 rounded-lg font-semibold text-sm transition-all duration-200 flex justify-center items-center gap-2 ${
+                    className={`w-full py-2 rounded-lg cursor-pointer font-semibold text-sm transition-all duration-200 flex justify-center items-center gap-2 ${
                       apt.status === "attended"
                         ? "bg-blue-500 hover:bg-blue-600 text-white"
                         : "bg-red-500 hover:bg-red-600 text-white"

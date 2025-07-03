@@ -4,7 +4,8 @@ const Appointment = () => {
   const today = new Date().toISOString().split("T")[0];
   const API_URL = import.meta.env.VITE_API_URL;
 
-  const [submitted, setSubmitted] = useState(false); // ✅ new state
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false); // ✅ loading state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,6 +19,8 @@ const Appointment = () => {
     };
 
     try {
+      setLoading(true); // ✅ start loading
+
       const res = await fetch(`${API_URL}/api/appointments`, {
         method: "POST",
         headers: {
@@ -31,14 +34,15 @@ const Appointment = () => {
 
       if (res.ok) {
         form.reset();
-        setSubmitted(true); // ✅ show success
-        setTimeout(() => setSubmitted(false), 3000); // ✅ revert after 3 sec
+        setSubmitted(true);
       } else {
         alert("⚠️ " + result.message || "Something went wrong.");
       }
     } catch (error) {
       console.error("Network Error:", error);
       alert("❌ Failed to connect to server. Please try again later.");
+    } finally {
+      setLoading(false); // ✅ stop loading
     }
   };
 
@@ -108,17 +112,35 @@ const Appointment = () => {
           <div>
             <button
               type="submit"
+              disabled={loading}
               className={`w-full py-3 cursor-pointer rounded-lg font-semibold transition-all duration-300 ${
                 submitted
                   ? "bg-green-500 hover:bg-green-600 text-white"
                   : "bg-pink-500 hover:bg-pink-600 text-white"
               }`}
             >
-              {submitted ? "Appointment Booked Successfully" : "Book Appointment"}
+              {loading ? (
+                <div className="flex justify-center items-center gap-2">
+                  <span className="loader border-t-2 border-white border-solid rounded-full w-5 h-5 animate-spin"></span>
+                  Saving...
+                </div>
+              ) : submitted ? (
+                "Book another Appointment"
+              ) : (
+                "Book Appointment"
+              )}
             </button>
           </div>
         </form>
       </section>
+
+      {/* Inline spinner styles */}
+      <style>{`
+        .loader {
+          border-right-color: transparent;
+          border-bottom-color: transparent;
+        }
+      `}</style>
     </div>
   );
 };
