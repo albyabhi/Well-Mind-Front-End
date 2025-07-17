@@ -34,7 +34,7 @@ const ProfileSection = () => {
         <div className="w-64 h-72 rounded-[50%/50%] bg-pink-100 overflow-hidden shadow-xl border-4 border-white transition-transform duration-300 hover:scale-105">
           <img
             src={IMG1}
-            alt="Shahina Kariyezhath"
+            alt="Shahina Rasheed"
             className="w-full h-full object-cover pointer-events-none"
             draggable="false"
           />
@@ -43,7 +43,7 @@ const ProfileSection = () => {
         {/* Text Content */}
         <div className="text-center md:text-left space-y-4">
           <h2 className="text-3xl font-bold text-[#2e2e87]">
-            Shahina Kariyezhath
+            Shahina Rasheed
           </h2>
           <p className="text-lg font-semibold text-[#444]">
             Consultant Psychologist & Therapist
